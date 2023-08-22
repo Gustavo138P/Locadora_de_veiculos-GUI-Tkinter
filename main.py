@@ -49,16 +49,27 @@ class interface():
         self.pg4.grab_set()
         self.frames_Home()
         self.widgets_Home()
+    def pagina_Cadastrar_veiculos(self):
+        self.pg5 = Toplevel()
+        self.pg5.title('CADASTRAR VEÍCULO')
+        self.pg5.minsize(width=300, height=300)
+        self.pg5.config(background='#008B8B')
+        self.pg5.maxsize(width=400, height=400)
+        self.pg5.transient(self.pg4)
+        self.pg5.focus_force()
+        self.pg5.grab_set()
+        self.frames_Cadastrar_veiculos()
+        self.widgets_Cadastrar_veiculos()
     def cadastrar_User(self):
         self.user_name = self.entradaUsuario.get()
         self.complet_name = self.entrada_cNome.get()
         self.senha_user = self.entrada_cSenha.get()
-        cadastro(self.user_name, self.complet_name, self.senha_user, 'usuarios.txt')
+        cadastro_usuarios(self.user_name, self.complet_name, self.senha_user, 'usuarios.txt')
     def logar(self):
         self.tentativa = 0
         self.nome_usuario = self.entradaNome.get()
         self.senha_usuario = self.entradaSenha.get()
-        usuarios = verificar_arquivo('usuarios.txt')
+        usuarios = verificar_usuarios('usuarios.txt')
         if usuarios:
             self.arquivo = open('usuarios.txt', 'r')
             for linha in self.arquivo:
@@ -71,6 +82,13 @@ class interface():
             if self.tentativa == 0:
                 self.senha_errada = Label(self.frame2Login, background='#008B8B', text='Usuario ou senha incorretos')
                 self.senha_errada.place(relx=0.001, rely=0.8, relheight=0.2, relwidth=0.9)
+    def cadastrar_Veiculo(self):
+        self.Modelo= self.entradaModelo.get()
+        self.Montadora = self.entradaMontadora.get()
+        self.Tipo = self.entradaClassificacao.get()
+        self.valor = self.entradaValor.get()
+        self.nome_arquivo = 'veiculos.txt'
+        cadastrar_veiculos(self.Modelo, self.Montadora, self.Tipo, self.valor, self.nome_arquivo)
     def frames_PgI(self):
         self.frame1 = Frame(self.janela, background='#008B8B')
         self.frame1.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.4)
@@ -166,7 +184,7 @@ class interface():
         self.frame1Home = Frame(self.pg4, background='#008B8B')
         self.frame1Home.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.15)
 
-        self.frame2Home = Frame(self.pg4, background='white')
+        self.frame2Home = Frame(self.pg4, background='#008B8B')
         self.frame2Home.place(relx=0.05, rely=0.25, relwidth=0.9, relheight=0.6)
     def widgets_Home(self):
         self.fonte = Font(family="Arial Black", size=15)
@@ -176,7 +194,7 @@ class interface():
         self.HomeTitulo = Label(self.frame1Home, text='HOME', background='#008B8B', font=self.fonte2)
         self.HomeTitulo.place(relx=0.15, rely=0.001, relheight=0.9, relwidth=0.7)
 
-        self.HomeCadastrar = Button(self.frame2Home, text='CADASTRAR NOVO VEÍCULO', bd=4, background='#FF4500', font=self.fonte3)
+        self.HomeCadastrar = Button(self.frame2Home, text='CADASTRAR NOVO VEÍCULO', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_Cadastrar_veiculos)
         self.HomeCadastrar.place(relx=0.001, rely=0.001, relheight=0.2, relwidth=1)
 
         self.HomeListar = Button(self.frame2Home, text='LISTAR VEÍCULOS CADASTRADOS', bd=4, background='#FF4500', font=self.fonte3)
@@ -190,7 +208,40 @@ class interface():
 
         self.HomeRegistrar = Button(self.frame2Home, text='REGISTRAR ALUGUEL', bd=4, background='#FF4500', font=self.fonte3)
         self.HomeRegistrar.place(relx=0.001, rely=0.8, relheight=0.2, relwidth=1)
+    def frames_Cadastrar_veiculos(self):
+        self.frame1Cadastrar_veiculos = Frame(self.pg5, background='#008B8B')
+        self.frame1Cadastrar_veiculos.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.75)
 
+        self.frame2Cadastrar_veiculos = Frame(self.pg5, background='#008B8B')
+        self.frame2Cadastrar_veiculos.place(relx=0.05, rely=0.8, relwidth=0.9, relheight=0.15)
+    def widgets_Cadastrar_veiculos(self):
+        self.fonte = Font(family="Arial Black", size=9)
+        self.cadastrarVeiculo1 = Label(self.frame1Cadastrar_veiculos, text='MODELO:', background='#008B8B', font=self.fonte)
+        self.cadastrarVeiculo1.place(relx=0.001, rely=0.001, relheight=0.1, relwidth=0.5)
+
+        self.entradaModelo = Entry(self.frame1Cadastrar_veiculos, background='white')
+        self.entradaModelo.place(relx=0.001, rely=0.08, relheight=0.14, relwidth=0.9)
+
+        self.cadastrarVeiculo2 = Label(self.frame1Cadastrar_veiculos, text='MONTADORA:', background='#008B8B', font=self.fonte)
+        self.cadastrarVeiculo2.place(relx=0.001, rely=0.22, relheight=0.1, relwidth=0.5)
+
+        self.entradaMontadora = Entry(self.frame1Cadastrar_veiculos, background='white')
+        self.entradaMontadora.place(relx=0.001, rely=0.31, relheight=0.14, relwidth=0.9)
+
+        self.cadastrarVeiculo3 = Label(self.frame1Cadastrar_veiculos, text='TIPO:', background='#008B8B', font=self.fonte)
+        self.cadastrarVeiculo3.place(relx=0.001, rely=0.45, relheight=0.1, relwidth=0.2)
+
+        self.entradaClassificacao = Entry(self.frame1Cadastrar_veiculos, background='white')
+        self.entradaClassificacao.place(relx=0.001, rely=0.54, relheight=0.14, relwidth=0.9)
+
+        self.cadastrarVeiculo4 = Label(self.frame1Cadastrar_veiculos, text='VALOR:', background='#008B8B', font=self.fonte)
+        self.cadastrarVeiculo4.place(relx=0.001, rely=0.68, relheight=0.1, relwidth=0.5)
+
+        self.entradaValor = Entry(self.frame1Cadastrar_veiculos, background='white')
+        self.entradaValor.place(relx=0.001, rely=0.77, relheight=0.14, relwidth=0.9)
+
+        self.c_Confirmar = Button(self.frame2Cadastrar_veiculos, text='CADASTRAR', bd=4, background='#FF4500', font=self.fonte, command=self.cadastrar_Veiculo)
+        self.c_Confirmar.place(relx=0.4, rely=0.001, relheight=0.7, relwidth=0.55)
 
 
 interface()
