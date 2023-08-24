@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter.font import Font
 from funcoes import *
+from tkinter import ttk
 
 janela = Tk()
 class interface():
@@ -10,11 +11,13 @@ class interface():
         self.frames_PgI()
         self.widgets_PgI()
         janela.mainloop()
+
     def pagina_Inicial(self):
         self.janela.title('PÁGINA INICIAL')
         self.janela.minsize(width=300, height=300)
         self.janela.config(background='#008B8B')
         self.janela.maxsize(width=400, height=400)
+
     def pagina_Login(self):
         self.pg2 = Toplevel()
         self.pg2.title('LOGIN')
@@ -27,6 +30,7 @@ class interface():
         self.pg2.grab_set()
         self.frames_Login()
         self.widgets_Login()
+
     def pagina_Cadastrar(self):
         self.pg3 = Toplevel()
         self.pg3.title('CADASTRAR')
@@ -38,6 +42,7 @@ class interface():
         self.pg3.grab_set()
         self.frames_Cadastrar()
         self.widgets_Cadastrar()
+
     def pagina_Home(self):
         self.pg4 = Toplevel()
         self.pg4.title('HOME')
@@ -49,6 +54,7 @@ class interface():
         self.pg4.grab_set()
         self.frames_Home()
         self.widgets_Home()
+
     def pagina_Cadastrar_veiculos(self):
         self.pg5 = Toplevel()
         self.pg5.title('CADASTRAR VEÍCULO')
@@ -60,11 +66,25 @@ class interface():
         self.pg5.grab_set()
         self.frames_Cadastrar_veiculos()
         self.widgets_Cadastrar_veiculos()
+
+    def pagina_Listar_Veiculos(self):
+        self.pg6 = Toplevel()
+        self.pg6.title('LISTAR VEÍCULOS')
+        self.pg6.minsize(width=500, height=500)
+        self.pg6.config(background='#008B8B')
+        self.pg6.resizable(False, False)
+        self.pg6.transient(self.pg4)
+        self.pg6.focus_force()
+        self.pg6.grab_set()
+        self.frames_Listar_veiculos()
+        self.widgets_Listar_veiculos()
+
     def cadastrar_User(self):
         self.user_name = self.entradaUsuario.get()
         self.complet_name = self.entrada_cNome.get()
         self.senha_user = self.entrada_cSenha.get()
         cadastro_usuarios(self.user_name, self.complet_name, self.senha_user, 'usuarios.txt')
+
     def logar(self):
         self.tentativa = 0
         self.nome_usuario = self.entradaNome.get()
@@ -82,6 +102,7 @@ class interface():
             if self.tentativa == 0:
                 self.senha_errada = Label(self.frame2Login, background='#008B8B', text='Usuario ou senha incorretos')
                 self.senha_errada.place(relx=0.001, rely=0.8, relheight=0.2, relwidth=0.9)
+
     def cadastrar_Veiculo(self):
         self.Modelo= self.entradaModelo.get()
         self.Montadora = self.entradaMontadora.get()
@@ -89,12 +110,23 @@ class interface():
         self.valor = self.entradaValor.get()
         self.nome_arquivo = 'veiculos.txt'
         cadastrar_veiculos(self.Modelo, self.Montadora, self.Tipo, self.valor, self.nome_arquivo)
+
+    def listar_veiculos(self):
+        opcao = self.selecao.get()
+        lista = []
+        listar(opcao, "veiculos.txt", lista)
+
+        self.planilha.delete(*self.planilha.get_children())
+        for (modelo, montadora, tipo, valor) in lista:
+            self.planilha.insert("", "end", values=(modelo, montadora, tipo, valor))
+
     def frames_PgI(self):
         self.frame1 = Frame(self.janela, background='#008B8B')
         self.frame1.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.4)
 
         self.frame2 = Frame(self.janela, background='#008B8B')
         self.frame2.place(relx=0.05, rely=0.5, relwidth=0.9, relheight=0.4)
+
     def widgets_PgI(self):
         self.fonte = Font(family="Arial Black", size=20)
         self.logo = Label(self.frame1, text='GUSTAVO\nLOCADORA', background='#008B8B', font=self.fonte)
@@ -106,6 +138,7 @@ class interface():
 
         self.cadastrar = Button(self.frame2, text='CADASTRAR', bd=4, background='#FF4500', font=self.fonte, command=self.pagina_Cadastrar)
         self.cadastrar.place(relx=0.25, rely=0.4, relheight=0.2, relwidth=0.5)
+
     def frames_Login(self):
         self.frame1Login = Frame(self.pg2, background='#008B8B')
         self.frame1Login.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.15)
@@ -115,6 +148,7 @@ class interface():
 
         self.frame3Login = Frame(self.pg2, background='#008B8B')
         self.frame3Login.place(relx=0.05, rely=0.7, relwidth=0.9, relheight=0.15)
+
     def widgets_Login(self):
         self.fonte = Font(family="Arial Black", size=15)
         self.fonte2 = Font(family="Arial Black", size=25)
@@ -137,6 +171,7 @@ class interface():
 
         self.confirmarLogin = Button(self.frame3Login, text='CONFIRMAR', bd=4, background='#FF4500', font=self.fonte, command=self.logar)
         self.confirmarLogin.place(relx=0.4, rely=0.001, relheight=0.7, relwidth=0.55)
+
     def frames_Cadastrar(self):
         self.frame1Cadastrar = Frame(self.pg3, background='#008B8B')
         self.frame1Cadastrar.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.15)
@@ -146,6 +181,7 @@ class interface():
 
         self.frame3Cadastrar = Frame(self.pg3, background='#008B8B')
         self.frame3Cadastrar.place(relx=0.05, rely=0.8, relwidth=0.9, relheight=0.15)
+
     def widgets_Cadastrar(self):
         self.fonte = Font(family="Arial Black", size=15)
         self.fonte2 = Font(family="Arial Black", size=20)
@@ -161,7 +197,7 @@ class interface():
         self.entradaUsuario.place(relx=0.001, rely=0.08, relheight=0.14, relwidth=0.9)
 
         self.cadastrarNome = Label(self.frame2Cadastrar, text='NOME COMPLETO:', background='#008B8B', font=self.fonte3)
-        self.cadastrarNome.place(relx=0.001, rely=0.22, relheight=0.1, relwidth=0.5)
+        self.cadastrarNome.place(relx=0.001, rely=0.22, relheight=0.1, relwidth=0.45)
 
         self.entrada_cNome = Entry(self.frame2Cadastrar, background='white')
         self.entrada_cNome.place(relx=0.001, rely=0.31, relheight=0.14, relwidth=0.9)
@@ -173,19 +209,21 @@ class interface():
         self.entrada_cSenha.place(relx=0.001, rely=0.54, relheight=0.14, relwidth=0.9)
 
         self.cadastrar_crSenha = Label(self.frame2Cadastrar, text='REPETIR SENHA:', background='#008B8B', font=self.fonte3)
-        self.cadastrar_crSenha.place(relx=0.001, rely=0.68, relheight=0.1, relwidth=0.5)
+        self.cadastrar_crSenha.place(relx=0.001, rely=0.68, relheight=0.1, relwidth=0.4)
 
         self.entrada_crSenha = Entry(self.frame2Cadastrar, background='white')
         self.entrada_crSenha.place(relx=0.001, rely=0.77, relheight=0.14, relwidth=0.9)
 
         self.c_Confirmar = Button(self.frame3Cadastrar, text='CONFIRMAR', bd=4, background='#FF4500', font=self.fonte, command=self.cadastrar_User)
         self.c_Confirmar.place(relx=0.4, rely=0.001, relheight=0.7, relwidth=0.55)
+
     def frames_Home(self):
         self.frame1Home = Frame(self.pg4, background='#008B8B')
         self.frame1Home.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.15)
 
         self.frame2Home = Frame(self.pg4, background='#008B8B')
         self.frame2Home.place(relx=0.05, rely=0.25, relwidth=0.9, relheight=0.6)
+
     def widgets_Home(self):
         self.fonte = Font(family="Arial Black", size=15)
         self.fonte2 = Font(family="Arial Black", size=20)
@@ -197,7 +235,7 @@ class interface():
         self.HomeCadastrar = Button(self.frame2Home, text='CADASTRAR NOVO VEÍCULO', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_Cadastrar_veiculos)
         self.HomeCadastrar.place(relx=0.001, rely=0.001, relheight=0.2, relwidth=1)
 
-        self.HomeListar = Button(self.frame2Home, text='LISTAR VEÍCULOS CADASTRADOS', bd=4, background='#FF4500', font=self.fonte3)
+        self.HomeListar = Button(self.frame2Home, text='LISTAR VEÍCULOS CADASTRADOS', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_Listar_Veiculos)
         self.HomeListar.place(relx=0.001, rely=0.2, relheight=0.2, relwidth=1)
 
         self.HomeAtualizar = Button(self.frame2Home, text='ATUALIZAR VEÍCULO CADASTRADO', bd=4, background='#FF4500', font=self.fonte3)
@@ -208,22 +246,24 @@ class interface():
 
         self.HomeRegistrar = Button(self.frame2Home, text='REGISTRAR ALUGUEL', bd=4, background='#FF4500', font=self.fonte3)
         self.HomeRegistrar.place(relx=0.001, rely=0.8, relheight=0.2, relwidth=1)
+
     def frames_Cadastrar_veiculos(self):
         self.frame1Cadastrar_veiculos = Frame(self.pg5, background='#008B8B')
         self.frame1Cadastrar_veiculos.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.75)
 
         self.frame2Cadastrar_veiculos = Frame(self.pg5, background='#008B8B')
         self.frame2Cadastrar_veiculos.place(relx=0.05, rely=0.8, relwidth=0.9, relheight=0.15)
+
     def widgets_Cadastrar_veiculos(self):
         self.fonte = Font(family="Arial Black", size=9)
         self.cadastrarVeiculo1 = Label(self.frame1Cadastrar_veiculos, text='MODELO:', background='#008B8B', font=self.fonte)
-        self.cadastrarVeiculo1.place(relx=0.001, rely=0.001, relheight=0.1, relwidth=0.5)
+        self.cadastrarVeiculo1.place(relx=0.001, rely=0.001, relheight=0.1, relwidth=0.28)
 
         self.entradaModelo = Entry(self.frame1Cadastrar_veiculos, background='white')
         self.entradaModelo.place(relx=0.001, rely=0.08, relheight=0.14, relwidth=0.9)
 
         self.cadastrarVeiculo2 = Label(self.frame1Cadastrar_veiculos, text='MONTADORA:', background='#008B8B', font=self.fonte)
-        self.cadastrarVeiculo2.place(relx=0.001, rely=0.22, relheight=0.1, relwidth=0.5)
+        self.cadastrarVeiculo2.place(relx=0.001, rely=0.22, relheight=0.1, relwidth=0.35)
 
         self.entradaMontadora = Entry(self.frame1Cadastrar_veiculos, background='white')
         self.entradaMontadora.place(relx=0.001, rely=0.31, relheight=0.14, relwidth=0.9)
@@ -235,13 +275,49 @@ class interface():
         self.entradaClassificacao.place(relx=0.001, rely=0.54, relheight=0.14, relwidth=0.9)
 
         self.cadastrarVeiculo4 = Label(self.frame1Cadastrar_veiculos, text='VALOR:', background='#008B8B', font=self.fonte)
-        self.cadastrarVeiculo4.place(relx=0.001, rely=0.68, relheight=0.1, relwidth=0.5)
+        self.cadastrarVeiculo4.place(relx=0.001, rely=0.68, relheight=0.1, relwidth=0.26)
 
         self.entradaValor = Entry(self.frame1Cadastrar_veiculos, background='white')
         self.entradaValor.place(relx=0.001, rely=0.77, relheight=0.14, relwidth=0.9)
 
         self.c_Confirmar = Button(self.frame2Cadastrar_veiculos, text='CADASTRAR', bd=4, background='#FF4500', font=self.fonte, command=self.cadastrar_Veiculo)
         self.c_Confirmar.place(relx=0.4, rely=0.001, relheight=0.7, relwidth=0.55)
+
+    def frames_Listar_veiculos(self):
+        self.frame1Listar_veiculos= Frame(self.pg6, background='#008B8B')
+        self.frame1Listar_veiculos.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.2)
+
+        self.frame2Listar_veiculos= Frame(self.pg6, background='#008B8B')
+        self.frame2Listar_veiculos.place(relx=0.05, rely=0.25, relwidth=0.9, relheight=0.7)
+
+    def widgets_Listar_veiculos(self):
+        self.fonte = Font(family='Arial Black')
+        self.fonte2 = Font(family="Arial Black", size=9)
+        self.fonte3 = Font(family="Arial Black", size=15)
+
+        self.selecionar_opcao = Label(self.frame1Listar_veiculos, background='#008B8B', font=self.fonte, text='Selecione a categoria do veículo:')
+        self.selecionar_opcao.place(relx=0.001, rely=0.01, relheight=0.4, relwidth=0.6)
+
+        opcoes = ['TODOS', 'HATCH', 'SEDÃ', 'ESPORTIVO', 'SUV', 'FAMILIAR']
+        self.selecao = ttk.Combobox(self.frame1Listar_veiculos, values=opcoes)
+        self.selecao.place(relx=0.002, rely=0.38, relheight=0.3, relwidth=0.5)
+
+        self.confirmar_opcao = Button(self.frame1Listar_veiculos, text='CONFIRMAR', bd=4, background='#FF4500', font=self.fonte2, command=self.listar_veiculos)
+        self.confirmar_opcao.place(relx=0.502, rely=0.38, relheight=0.3, relwidth=0.25)
+
+        self.titulo_lista = Label(self.frame1Listar_veiculos, text='LISTA DE VEÍCULOS', background='#008B8B', font=self.fonte3)
+        self.titulo_lista.place(relx=0.202, rely=0.68, relheight=0.3, relwidth=0.6)
+
+        self.planilha = ttk.Treeview(self.frame2Listar_veiculos, columns=('MODELO', 'MONTADORA', 'TIPO', 'VALOR'), show='headings')
+        self.planilha.column('MODELO', minwidth=0, width=50)
+        self.planilha.column('MONTADORA', minwidth=0, width=50)
+        self.planilha.column('TIPO', minwidth=0, width=50)
+        self.planilha.column('VALOR', minwidth=0, width=50)
+        self.planilha.heading('MODELO', text='MODELO')
+        self.planilha.heading('MONTADORA', text='MONTADORA')
+        self.planilha.heading('TIPO', text='TIPO')
+        self.planilha.heading('VALOR', text='VALOR')
+        self.planilha.place(relx=0.001, rely=0.001, relheight=1, relwidth=1)
 
 
 interface()
