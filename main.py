@@ -86,11 +86,17 @@ class interface():
         self.complet_name = self.entrada_cNome.get()
         self.senha_user = self.entrada_cSenha.get()
         cadastro_usuarios(self.user_name, self.complet_name, self.senha_user, 'usuarios.txt')
+        limpar_texto(self.entradaUsuario)
+        limpar_texto(self.entrada_cNome)
+        limpar_texto(self.entrada_cSenha)
+        limpar_texto(self.entrada_crSenha)
 
     def logar(self):
         self.tentativa = 0
         self.nome_usuario = self.entradaNome.get()
         self.senha_usuario = self.entradaSenha.get()
+        limpar_texto(self.entradaNome)
+        limpar_texto(self.entradaSenha)
         usuarios = verificar_usuarios('usuarios.txt')
         if usuarios:
             self.arquivo = open('usuarios.txt', 'r')
@@ -116,6 +122,10 @@ class interface():
         self.valor = self.valor.upper()
         self.nome_arquivo = 'veiculos.txt'
         cadastrar_veiculos(self.Modelo, self.Montadora, self.Tipo, self.valor, self.nome_arquivo)
+        limpar_texto(self.entradaModelo)
+        limpar_texto(self.entradaMontadora)
+        limpar_texto(self.entradaClassificacao)
+        limpar_texto(self.entradaValor)
 
     def listar_veiculos(self):
         opcao = self.selecao.get()

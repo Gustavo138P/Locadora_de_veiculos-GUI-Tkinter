@@ -1,3 +1,6 @@
+import tkinter as tk
+
+
 def verificar_usuarios(nome_arquivo):
     try:
         arquivo = open(nome_arquivo, 'r')
@@ -80,3 +83,7 @@ def listar(opcao, nome_arquivo, lista):
             percorrer_lista(opcao, nome_arquivo, lista)
         case 'FAMILIAR':
             percorrer_lista(opcao, nome_arquivo, lista)
+
+
+def limpar_texto(entrada):
+    entrada.delete(0, tk.END)
