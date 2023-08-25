@@ -333,7 +333,10 @@ class interface():
         self.planilha.heading('MONTADORA', text='MONTADORA')
         self.planilha.heading('TIPO', text='TIPO')
         self.planilha.heading('VALOR', text='VALOR')
-        self.planilha.place(relx=0.001, rely=0.001, relheight=1, relwidth=1)
+        self.planilha.place(relx=0.0001, rely=0.001, relheight=1, relwidth=0.95)
 
+        self.Scroll_lista = Scrollbar(self.frame2Listar_veiculos, orient='vertical')
+        self.planilha.configure(yscrollcommand=self.Scroll_lista.set)
+        self.Scroll_lista.place(relx=0.9501, rely=0.001, relheight=1, relwidth=0.05)
 
 interface()
