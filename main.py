@@ -4,6 +4,8 @@ from funcoes import *
 from tkinter import ttk
 
 janela = Tk()
+
+
 class interface():
     def __init__(self):
         self.janela = janela
@@ -108,6 +110,10 @@ class interface():
         self.Montadora = self.entradaMontadora.get()
         self.Tipo = self.entradaClassificacao.get()
         self.valor = self.entradaValor.get()
+        self.Modelo = self.Modelo.upper()
+        self.Montadora = self.Montadora.upper()
+        self.Tipo = self.Tipo.upper()
+        self.valor = self.valor.upper()
         self.nome_arquivo = 'veiculos.txt'
         cadastrar_veiculos(self.Modelo, self.Montadora, self.Tipo, self.valor, self.nome_arquivo)
 
