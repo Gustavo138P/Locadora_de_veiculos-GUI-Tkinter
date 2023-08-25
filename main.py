@@ -81,6 +81,18 @@ class interface():
         self.frames_Listar_veiculos()
         self.widgets_Listar_veiculos()
 
+    def pagina_Atualizar_Veiculos(self):
+        self.pg7 = Toplevel()
+        self.pg7.title('ATUALIZAR VEÍCULO')
+        self.pg7.minsize(width=300, height=300)
+        self.pg7.config(background='#008B8B')
+        self.pg7.maxsize(width=400, height=400)
+        self.pg7.transient(self.pg4)
+        self.pg7.focus_force()
+        self.pg7.grab_set()
+        self.frames_Atualizar_veiculos()
+        self.widgets_Atualizar_veiculos()
+
     def cadastrar_User(self):
         self.user_name = self.entradaUsuario.get()
         self.complet_name = self.entrada_cNome.get()
@@ -135,6 +147,16 @@ class interface():
         self.planilha.delete(*self.planilha.get_children())
         for (modelo, montadora, tipo, valor) in lista:
             self.planilha.insert("", "end", values=(modelo, montadora, tipo, valor))
+
+    def atualizar_veiculo(self):
+        opcao = self.selecao_veiculo.get()
+        opcao2 = self.selecao_veiculo2.get()
+        novo = self.novo_valor.get()
+        novo = novo.upper()
+        atualizar_v('veiculos.txt', opcao, opcao2, novo)
+        limpar_texto(self.novo_valor)
+        limpar_texto(self.selecao_veiculo)
+        limpar_texto(self.selecao_veiculo2)
 
     def frames_PgI(self):
         self.frame1 = Frame(self.janela, background='#008B8B')
@@ -238,7 +260,7 @@ class interface():
         self.frame1Home.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.15)
 
         self.frame2Home = Frame(self.pg4, background='#008B8B')
-        self.frame2Home.place(relx=0.05, rely=0.25, relwidth=0.9, relheight=0.6)
+        self.frame2Home.place(relx=0.05, rely=0.2, relwidth=0.9, relheight=0.9)
 
     def widgets_Home(self):
         self.fonte = Font(family="Arial Black", size=15)
@@ -249,19 +271,22 @@ class interface():
         self.HomeTitulo.place(relx=0.15, rely=0.001, relheight=0.9, relwidth=0.7)
 
         self.HomeCadastrar = Button(self.frame2Home, text='CADASTRAR NOVO VEÍCULO', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_Cadastrar_veiculos)
-        self.HomeCadastrar.place(relx=0.001, rely=0.001, relheight=0.2, relwidth=1)
+        self.HomeCadastrar.place(relx=0.001, rely=0.001, relheight=0.12, relwidth=1)
 
         self.HomeListar = Button(self.frame2Home, text='LISTAR VEÍCULOS CADASTRADOS', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_Listar_Veiculos)
-        self.HomeListar.place(relx=0.001, rely=0.2, relheight=0.2, relwidth=1)
+        self.HomeListar.place(relx=0.001, rely=0.121, relheight=0.12, relwidth=1)
 
-        self.HomeAtualizar = Button(self.frame2Home, text='ATUALIZAR VEÍCULO CADASTRADO', bd=4, background='#FF4500', font=self.fonte3)
-        self.HomeAtualizar.place(relx=0.001, rely=0.4, relheight=0.2, relwidth=1)
+        self.HomeAtualizar = Button(self.frame2Home, text='ATUALIZAR VEÍCULO CADASTRADO', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_Atualizar_Veiculos)
+        self.HomeAtualizar.place(relx=0.001, rely=0.241, relheight=0.12, relwidth=1)
 
         self.HomeExcluir = Button(self.frame2Home, text='EXCLUIR VEÍCULO', bd=4, background='#FF4500', font=self.fonte3)
-        self.HomeExcluir.place(relx=0.001, rely=0.6, relheight=0.2, relwidth=1)
+        self.HomeExcluir.place(relx=0.001, rely=0.361, relheight=0.12, relwidth=1)
 
-        self.HomeRegistrar = Button(self.frame2Home, text='REGISTRAR ALUGUEL', bd=4, background='#FF4500', font=self.fonte3)
-        self.HomeRegistrar.place(relx=0.001, rely=0.8, relheight=0.2, relwidth=1)
+        self.HomeRegistrar = Button(self.frame2Home, text='REGISTRAR LOCAÇÃO', bd=4, background='#FF4500', font=self.fonte3)
+        self.HomeRegistrar.place(relx=0.001, rely=0.481, relheight=0.12, relwidth=1)
+
+        self.HomeListarLocacoes= Button(self.frame2Home, text='LISTAR LOCAÇÕES', bd=4, background='#FF4500', font=self.fonte3)
+        self.HomeListarLocacoes.place(relx=0.001, rely=0.601, relheight=0.12, relwidth=1)
 
     def frames_Cadastrar_veiculos(self):
         self.frame1Cadastrar_veiculos = Frame(self.pg5, background='#008B8B')
@@ -338,5 +363,42 @@ class interface():
         self.Scroll_lista = Scrollbar(self.frame2Listar_veiculos, orient='vertical')
         self.planilha.configure(yscrollcommand=self.Scroll_lista.set)
         self.Scroll_lista.place(relx=0.9501, rely=0.001, relheight=1, relwidth=0.05)
+
+    def frames_Atualizar_veiculos(self):
+        self.frame1Atualizar_veiculos = Frame(self.pg7, background='#008B8B')
+        self.frame1Atualizar_veiculos.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.4)
+
+        self.frame2Atualizar_veiculos = Frame(self.pg7, background='#008B8B')
+        self.frame2Atualizar_veiculos.place(relx=0.05, rely=0.45, relwidth=0.9, relheight=0.5)
+
+    def widgets_Atualizar_veiculos(self):
+
+        self.fonte = Font(family='Arial Black')
+
+        self.texto_Atualiza_veiculo = Label(self.frame1Atualizar_veiculos, background='#008B8B', font=self.fonte, text='SELECIONE O VEÍCULO')
+        self.texto_Atualiza_veiculo.place(relx=0, rely=0, relheight=0.3, relwidth=1)
+
+        lista = []
+        listar('TODOS', "veiculos.txt", lista)
+        veiculos = [sublista[0] for sublista in lista]
+        self.selecao_veiculo = ttk.Combobox(self.frame1Atualizar_veiculos, values=veiculos)
+        self.selecao_veiculo.place(relx=0, rely=0.3, relheight=0.2, relwidth=1)
+
+        self.texto2_Atualiza_veiculo = Label(self.frame1Atualizar_veiculos, background='#008B8B', font=self.fonte, text='SELECIONE O VALOR A ALTERAR')
+        self.texto2_Atualiza_veiculo.place(relx=0, rely=0.5, relheight=0.3, relwidth=1)
+
+        lista = ['MODELO', 'MONTADORA', 'TIPO', 'VALOR']
+        self.selecao_veiculo2 = ttk.Combobox(self.frame1Atualizar_veiculos, values=lista)
+        self.selecao_veiculo2.place(relx=0, rely=0.8, relheight=0.2, relwidth=1)
+
+        self.texto3_Atualiza_veiculo = Label(self.frame2Atualizar_veiculos, background='#008B8B', font=self.fonte, text='DIGITE O NOVO VALOR')
+        self.texto3_Atualiza_veiculo.place(relx=0, rely=0, relheight=0.3, relwidth=1)
+
+        self.novo_valor = Entry(self.frame2Atualizar_veiculos)
+        self.novo_valor.place(relx=0, rely=0.3, relheight=0.3, relwidth=1)
+
+        self.botao_seleciona_veiculo = Button(self.frame2Atualizar_veiculos, text='ATUALIZAR VEÍCULO', bd=4, background='#FF4500', font=self.fonte, command=self.atualizar_veiculo)
+        self.botao_seleciona_veiculo.place(relx=0.15, rely=0.6, relheight=0.3, relwidth=0.7)
+
 
 interface()

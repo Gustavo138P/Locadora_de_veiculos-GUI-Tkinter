@@ -87,3 +87,31 @@ def listar(opcao, nome_arquivo, lista):
 
 def limpar_texto(entrada):
     entrada.delete(0, tk.END)
+
+
+def atualizar_v(nome_arquivo, opcao, opcao2, novo):
+    linhas_modificadas = []
+
+    arquivo = open(nome_arquivo, 'r')
+    for line in arquivo:
+        atual_line = line.split('#')
+        if atual_line[0] == opcao:
+            match opcao2:
+                case 'MODELO':
+                    linhas_modificadas.append(novo + "#" + atual_line[1] + "#" + atual_line[2] + "#" + atual_line[3] + '\n')
+                case 'MONTADORA':
+                    linhas_modificadas.append(atual_line[0] + "#" + novo + "#" + atual_line[2] + "#" + atual_line[3] + '\n')
+                case 'TIPO':
+                    linhas_modificadas.append(atual_line[0] + "#" + atual_line[1] + "#" + novo + "#" + atual_line[3] + '\n')
+                case 'VALOR':
+                    linhas_modificadas.append(atual_line[0] + "#" + atual_line[1] + "#" + atual_line[2] + "#" + novo + '\n')
+        else:
+            linhas_modificadas.append(atual_line[0] + "#" + atual_line[1] + "#" + atual_line[2] + "#" + atual_line[3])
+    arquivo.close()
+
+    arquivo2 = open(nome_arquivo, 'w')
+    for line in linhas_modificadas:
+        atual_line = line.split(sep="\n")
+        del atual_line[1]
+        arquivo2.write("#".join(atual_line) + "\n")
+    arquivo2.close()
