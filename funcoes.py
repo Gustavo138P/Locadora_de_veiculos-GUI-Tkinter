@@ -115,3 +115,24 @@ def atualizar_v(nome_arquivo, opcao, opcao2, novo):
         del atual_line[1]
         arquivo2.write("#".join(atual_line) + "\n")
     arquivo2.close()
+
+
+def Excluir_v(nome_arquivo, opcao):
+    linhas_modificadas = []
+
+    arquivo = open(nome_arquivo, 'r')
+    for line in arquivo:
+        atual_line = line.split('#')
+        if atual_line[0] == opcao:
+            continue
+        else:
+            linhas_modificadas.append(atual_line[0] + "#" + atual_line[1] + "#" + atual_line[2] + "#" + atual_line[3])
+    arquivo.close()
+
+    arquivo2 = open(nome_arquivo, 'w')
+    for line in linhas_modificadas:
+        atual_line = line.split(sep="\n")
+        del atual_line[1]
+        arquivo2.write("#".join(atual_line) + "\n")
+    arquivo2.close()
+    return 1

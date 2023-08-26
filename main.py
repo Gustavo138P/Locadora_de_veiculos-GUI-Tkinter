@@ -93,6 +93,18 @@ class interface():
         self.frames_Atualizar_veiculos()
         self.widgets_Atualizar_veiculos()
 
+    def pagina_excluir_veiculos(self):
+        self.pg8 = Toplevel()
+        self.pg8.title('EXCLUIR VEÍCULO')
+        self.pg8.minsize(width=300, height=100)
+        self.pg8.config(background='#008B8B')
+        self.pg8.maxsize(width=400, height=400)
+        self.pg8.transient(self.pg4)
+        self.pg8.focus_force()
+        self.pg8.grab_set()
+        self.frames_Excluir_veiculos()
+        self.widgets_Excluir_veiculos()
+
     def cadastrar_User(self):
         self.user_name = self.entradaUsuario.get()
         self.complet_name = self.entrada_cNome.get()
@@ -117,7 +129,7 @@ class interface():
                 if atual_linha[0] == self.nome_usuario:
                     if atual_linha[1] == self.senha_usuario:
                         self.pagina_Home()
-                        self.tentativa+=1
+                        self.tentativa += 1
                         break
             if self.tentativa == 0:
                 self.senha_errada = Label(self.frame2Login, background='#008B8B', text='Usuario ou senha incorretos')
@@ -157,6 +169,13 @@ class interface():
         limpar_texto(self.novo_valor)
         limpar_texto(self.selecao_veiculo)
         limpar_texto(self.selecao_veiculo2)
+
+    def Excluir_veiculos(self):
+        opcao = self.Excluir_veiculo.get()
+        exclusao = Excluir_v('veiculos.txt', opcao)
+
+        if exclusao == 1:
+            self.pg8.destroy()
 
     def frames_PgI(self):
         self.frame1 = Frame(self.janela, background='#008B8B')
@@ -279,7 +298,7 @@ class interface():
         self.HomeAtualizar = Button(self.frame2Home, text='ATUALIZAR VEÍCULO CADASTRADO', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_Atualizar_Veiculos)
         self.HomeAtualizar.place(relx=0.001, rely=0.241, relheight=0.12, relwidth=1)
 
-        self.HomeExcluir = Button(self.frame2Home, text='EXCLUIR VEÍCULO', bd=4, background='#FF4500', font=self.fonte3)
+        self.HomeExcluir = Button(self.frame2Home, text='EXCLUIR VEÍCULO', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_excluir_veiculos)
         self.HomeExcluir.place(relx=0.001, rely=0.361, relheight=0.12, relwidth=1)
 
         self.HomeRegistrar = Button(self.frame2Home, text='REGISTRAR LOCAÇÃO', bd=4, background='#FF4500', font=self.fonte3)
@@ -399,6 +418,31 @@ class interface():
 
         self.botao_seleciona_veiculo = Button(self.frame2Atualizar_veiculos, text='ATUALIZAR VEÍCULO', bd=4, background='#FF4500', font=self.fonte, command=self.atualizar_veiculo)
         self.botao_seleciona_veiculo.place(relx=0.15, rely=0.6, relheight=0.3, relwidth=0.7)
+
+    def frames_Excluir_veiculos(self):
+
+        self.frame1Excluir_veiculos = Frame(self.pg8, background='#008B8B')
+        self.frame1Excluir_veiculos.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.7)
+
+        self.frame2EXcluir_veiculos = Frame(self.pg8, background='yellow')
+        self.frame2EXcluir_veiculos.place(relx=0.05, rely=0.75, relwidth=0.9, relheight=0.2)
+
+
+    def widgets_Excluir_veiculos(self):
+
+        self.fonte = Font(family='Arial Black', size=15)
+
+        self.texto_Excluir_veiculo = Label(self.frame1Excluir_veiculos, background='#008B8B', font=self.fonte, text='SELECIONE O VEÍCULO')
+        self.texto_Excluir_veiculo.place(relx=0, rely=0.1, relheight=0.4, relwidth=1)
+
+        lista = []
+        listar('TODOS', "veiculos.txt", lista)
+        veiculos = [sublista[0] for sublista in lista]
+        self.Excluir_veiculo = ttk.Combobox(self.frame1Excluir_veiculos, values=veiculos)
+        self.Excluir_veiculo.place(relx=0, rely=0.5, relheight=0.3, relwidth=1)
+
+        self.botao_Excluir_veiculo = Button(self.frame2EXcluir_veiculos, text='EXCLUIR VEÍCULO', bd=4, background='#FF4500', font=self.fonte, command=self.Excluir_veiculos)
+        self.botao_Excluir_veiculo.place(relx=0, rely=0, relheight=1, relwidth=1)
 
 
 interface()
