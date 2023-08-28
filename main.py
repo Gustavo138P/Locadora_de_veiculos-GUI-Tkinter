@@ -118,6 +118,27 @@ class interface():
         self.frames_Registrar_locacao()
         self.widgets_Registrar_locacao()
 
+    def pagina_listar_locacao(self):
+        self.pg10 = Toplevel()
+        self.pg10.title('REGISTRO DE LOCAÇÕES')
+        self.pg10.minsize(width=300, height=300)
+        self.pg10.config(background='#008B8B')
+        self.pg10.resizable(False, False)
+        self.pg10.transient(self.pg4)
+        self.pg10.focus_force()
+        self.pg10.grab_set()
+        self.widgets_listar_locacao()
+
+    def pagina_lista_de_locacao(self):
+        self.pg11 = Toplevel()
+        self.pg11.title('REGISTRO DE LOCAÇÕES')
+        self.pg11.minsize(width=800, height=500)
+        self.pg11.config(background='#008B8B')
+        self.pg11.transient(self.pg10)
+        self.pg11.focus_force()
+        self.pg11.grab_set()
+        self.widgets_lista_locacao()
+
     def cadastrar_User(self):
         self.user_name = self.entradaUsuario.get()
         self.complet_name = self.entrada_cNome.get()
@@ -344,7 +365,7 @@ class interface():
         self.HomeRegistrar = Button(self.frame2Home, text='REGISTRAR LOCAÇÃO', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_locacao)
         self.HomeRegistrar.place(relx=0.001, rely=0.481, relheight=0.12, relwidth=1)
 
-        self.HomeListarLocacoes= Button(self.frame2Home, text='LISTAR LOCAÇÕES', bd=4, background='#FF4500', font=self.fonte3)
+        self.HomeListarLocacoes= Button(self.frame2Home, text='LISTAR LOCAÇÕES', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_listar_locacao)
         self.HomeListarLocacoes.place(relx=0.001, rely=0.601, relheight=0.12, relwidth=1)
 
     def frames_Cadastrar_veiculos(self):
@@ -467,7 +488,6 @@ class interface():
         self.frame2EXcluir_veiculos = Frame(self.pg8, background='#008B8B')
         self.frame2EXcluir_veiculos.place(relx=0.05, rely=0.75, relwidth=0.9, relheight=0.2)
 
-
     def widgets_Excluir_veiculos(self):
 
         self.fonte = Font(family='Arial Black', size=15)
@@ -566,5 +586,63 @@ class interface():
 
         self.confirmar_locacao = Button(self.frame3Registrar_locacao, text='CONFIRMAR', bd=4, background='#FF4500', command=self.locar_veiculo)
         self.confirmar_locacao.place(relx=0.2, rely=0.6, relwidth=0.6, relheight=0.4)
+
+    def widgets_listar_locacao(self):
+        self.fonte3 = Font(family="Arial Black", size=15)
+
+        self.selecionar_opcao_locacao = Label(self.pg10, background='#008B8B', font=self.fonte3,
+                                      text='Selecione o veículo')
+        self.selecionar_opcao_locacao.place(relx=0.15, rely=0.1, relheight=0.15, relwidth=0.7)
+
+        lista = []
+        listar('TODOS', "veiculos.txt", lista)
+        veiculos = [sublista[0] for sublista in lista]
+        self.selecao_nova = ttk.Combobox(self.pg10, values=veiculos)
+        self.selecao_nova.place(relx=0.002, rely=0.25, relheight=0.2, relwidth=1)
+
+        self.confirmar_opcao = Button(self.pg10, text='CONFIRMAR', bd=4, background='#FF4500',
+                                      font=self.fonte3, command=self.pagina_lista_de_locacao)
+        self.confirmar_opcao.place(relx=0.25, rely=0.6, relheight=0.25, relwidth=0.5)
+
+    def widgets_lista_locacao(self):
+        self.fonte3 = Font(family="Arial Black", size=20)
+
+        self.titulo_lista_loc = Label(self.pg11, text='LISTA DE LOCAÇÕES', background='#008B8B',
+                                  font=self.fonte3)
+        self.titulo_lista_loc.place(relx=0.202, rely=0.001, relheight=0.3, relwidth=0.6)
+
+        self.planilha2 = ttk.Treeview(self.pg11, columns=('NOME', 'CPF', 'RG', 'TELEFONE', 'EMAIL', 'MODELO', 'DIARIAS', 'VALOR', 'PAGAMENTO'),
+                                     show='headings')
+        self.planilha2.column('NOME', minwidth=0, width=50)
+        self.planilha2.column('CPF', minwidth=0, width=50)
+        self.planilha2.column('RG', minwidth=0, width=50)
+        self.planilha2.column('TELEFONE', minwidth=0, width=50)
+        self.planilha2.column('EMAIL', minwidth=0, width=50)
+        self.planilha2.column('MODELO', minwidth=0, width=50)
+        self.planilha2.column('DIARIAS', minwidth=0, width=50)
+        self.planilha2.column('VALOR', minwidth=0, width=50)
+        self.planilha2.column('PAGAMENTO', minwidth=0, width=50)
+        self.planilha2.heading('NOME', text='NOME')
+        self.planilha2.heading('CPF', text='CPF')
+        self.planilha2.heading('RG', text='RG')
+        self.planilha2.heading('TELEFONE', text='TELEFONE')
+        self.planilha2.heading('EMAIL', text='EMAIL')
+        self.planilha2.heading('MODELO', text='MODELO')
+        self.planilha2.heading('DIARIAS', text='DIARIAS')
+        self.planilha2.heading('VALOR', text='VALOR')
+        self.planilha2.heading('PAGAMENTO', text='PAGAMENTO')
+        self.planilha2.place(relx=0.03, rely=0.3, relheight=0.6, relwidth=0.94)
+
+        opcao = self.selecao_nova.get()
+        lista = []
+        percorrer_locacoes("locacao.txt", opcao, lista)
+        self.planilha2.delete(*self.planilha2.get_children())
+        for (nome, cpf, rg, telefone, email, modelo, diarias, valor, pagamento) in lista:
+            self.planilha2.insert("", "end", values=(nome, cpf, rg, telefone, email, modelo, diarias, valor, pagamento))
+
+        self.Scroll_lista2 = Scrollbar(self.pg11, orient='vertical')
+        self.planilha2.configure(yscrollcommand=self.Scroll_lista2.set)
+        self.Scroll_lista2.place(relx=0.97, rely=0.3, relheight=0.6, relwidth=0.03)
+
 
 interface()

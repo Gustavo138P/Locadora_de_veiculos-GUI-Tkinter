@@ -166,3 +166,12 @@ def registrar_Locacao(nome_arquivo, opcao, nome, cpf, rg, telefone, email, valor
         arquivo2.write(nome + "#" + cpf + "#" + rg + "#" + telefone + "#" + email + "#" + opcao + "#" + diarias + "#" + valor + "#" + forma_de_pagamento + "\n")
     finally:
         arquivo2.close()
+
+
+def percorrer_locacoes(nome_arquivo, opcao, lista):
+    arquivo = open(nome_arquivo, 'r')
+
+    for line in arquivo:
+        atual_line = line.split(sep='#')
+        if atual_line[5] == opcao:
+            lista.append(atual_line)
