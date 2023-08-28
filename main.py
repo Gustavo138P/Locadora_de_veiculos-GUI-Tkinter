@@ -429,8 +429,8 @@ class interface():
         self.titulo_lista = Label(self.frame1Listar_veiculos, text='LISTA DE VEÍCULOS', background='#008B8B', font=self.fonte3)
         self.titulo_lista.place(relx=0.202, rely=0.68, relheight=0.3, relwidth=0.6)
 
-        self.estilo = ttk.Style()
-        self.estilo.configure("Custom.Treeview", background="#66CDAA")
+        estilo = ttk.Style()
+        estilo.configure("Custom.Treeview", background="#66CDAA")
         self.planilha = ttk.Treeview(self.frame2Listar_veiculos, columns=('MODELO', 'MONTADORA', 'TIPO', 'VALOR'), show='headings', style="Custom.Treeview")
         self.planilha.column('MODELO', minwidth=0, width=50)
         self.planilha.column('MONTADORA', minwidth=0, width=50)
@@ -613,6 +613,8 @@ class interface():
                                   font=self.fonte3)
         self.titulo_lista_loc.place(relx=0.202, rely=0.001, relheight=0.3, relwidth=0.6)
 
+        estilo = ttk.Style()
+        estilo.configure("Custom.Treeview", background="#66CDAA")
         self.planilha2 = ttk.Treeview(self.pg11, columns=('NOME', 'CPF', 'RG', 'TELEFONE', 'EMAIL', 'MODELO', 'DIARIAS', 'VALOR', 'PAGAMENTO'),
                                      show='headings', style="Custom.Treeview")
         self.planilha2.column('NOME', minwidth=0, width=50)
