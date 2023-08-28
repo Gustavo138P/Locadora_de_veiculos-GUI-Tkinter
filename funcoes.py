@@ -136,3 +136,33 @@ def Excluir_v(nome_arquivo, opcao):
         arquivo2.write("#".join(atual_line) + "\n")
     arquivo2.close()
     return 1
+
+
+def obter_valor_base(nome_arquivo, opcao):
+
+    valor_final = []
+
+    arquivo = open(nome_arquivo, 'r')
+    for line in arquivo:
+        atual_line = line.split('#')
+        if atual_line[0] == opcao:
+            valor_final.append(atual_line[3])
+        else:
+            continue
+    arquivo.close()
+
+    valor_final = ",".join(valor_final)
+    valor_final = valor_final.split(',')
+    valor_final = int(valor_final[0])
+    return valor_final
+
+
+def registrar_Locacao(nome_arquivo, opcao, nome, cpf, rg, telefone, email, valor, diarias, forma_de_pagamento):
+    try:
+        arquivo2 = open(nome_arquivo, 'a')
+    except:
+        print('Erro ao abrir o arquivo')
+    else:
+        arquivo2.write(nome + "#" + cpf + "#" + rg + "#" + telefone + "#" + email + "#" + opcao + "#" + diarias + "#" + valor + "#" + forma_de_pagamento + "\n")
+    finally:
+        arquivo2.close()

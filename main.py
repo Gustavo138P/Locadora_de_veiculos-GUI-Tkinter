@@ -8,6 +8,7 @@ janela = Tk()
 
 class interface():
     def __init__(self):
+        self.valor_locacao = 0
         self.janela = janela
         self.pagina_Inicial()
         self.frames_PgI()
@@ -105,6 +106,18 @@ class interface():
         self.frames_Excluir_veiculos()
         self.widgets_Excluir_veiculos()
 
+    def pagina_locacao(self):
+        self.pg9 = Toplevel()
+        self.pg9.title('REGISTRAR LOCAÇÃO')
+        self.pg9.minsize(width=500, height=400)
+        self.pg9.resizable(False, False)
+        self.pg9.config(background='#008B8B')
+        self.pg9.transient(self.pg4)
+        self.pg9.focus_force()
+        self.pg9.grab_set()
+        self.frames_Registrar_locacao()
+        self.widgets_Registrar_locacao()
+
     def cadastrar_User(self):
         self.user_name = self.entradaUsuario.get()
         self.complet_name = self.entrada_cNome.get()
@@ -176,6 +189,33 @@ class interface():
 
         if exclusao == 1:
             self.pg8.destroy()
+
+    def calculo_valor(self):
+
+        diarias_str = self.diarias_cliente.get()
+
+        if diarias_str.isdigit():
+            diarias = int(diarias_str)
+            valor_base = obter_valor_base('veiculos.txt', self.selecionar_veiculo_locacao.get())
+            self.valor_locacao = diarias * valor_base
+            self.imprimir.set(str(self.valor_locacao))
+        else:
+            self.imprimir.set("Valor diárias inválido")
+
+    def locar_veiculo(self):
+        diarias_str = self.diarias_cliente.get()
+
+        if diarias_str.isdigit():
+            diarias = int(diarias_str)
+            g_diarias = diarias_str
+            opcao = self.selecionar_veiculo_locacao.get()
+            valor_base = obter_valor_base('veiculos.txt', self.selecionar_veiculo_locacao.get())
+            valor = diarias * valor_base
+            g_valor = str(valor)
+            registrar_Locacao('locacao.txt', opcao, self.nome_cliente.get(), self.cpf_cliente.get(), self.rg_cliente.get(), self.telefone_cliente.get(), self.email_cliente.get(), g_valor, g_diarias, self.selecionar_pagamento.get())
+            self.pg9.destroy()
+        else:
+            self.imprimir.set("Valor diárias inválido")
 
     def frames_PgI(self):
         self.frame1 = Frame(self.janela, background='#008B8B')
@@ -301,7 +341,7 @@ class interface():
         self.HomeExcluir = Button(self.frame2Home, text='EXCLUIR VEÍCULO', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_excluir_veiculos)
         self.HomeExcluir.place(relx=0.001, rely=0.361, relheight=0.12, relwidth=1)
 
-        self.HomeRegistrar = Button(self.frame2Home, text='REGISTRAR LOCAÇÃO', bd=4, background='#FF4500', font=self.fonte3)
+        self.HomeRegistrar = Button(self.frame2Home, text='REGISTRAR LOCAÇÃO', bd=4, background='#FF4500', font=self.fonte3, command=self.pagina_locacao)
         self.HomeRegistrar.place(relx=0.001, rely=0.481, relheight=0.12, relwidth=1)
 
         self.HomeListarLocacoes= Button(self.frame2Home, text='LISTAR LOCAÇÕES', bd=4, background='#FF4500', font=self.fonte3)
@@ -424,7 +464,7 @@ class interface():
         self.frame1Excluir_veiculos = Frame(self.pg8, background='#008B8B')
         self.frame1Excluir_veiculos.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.7)
 
-        self.frame2EXcluir_veiculos = Frame(self.pg8, background='yellow')
+        self.frame2EXcluir_veiculos = Frame(self.pg8, background='#008B8B')
         self.frame2EXcluir_veiculos.place(relx=0.05, rely=0.75, relwidth=0.9, relheight=0.2)
 
 
@@ -444,5 +484,87 @@ class interface():
         self.botao_Excluir_veiculo = Button(self.frame2EXcluir_veiculos, text='EXCLUIR VEÍCULO', bd=4, background='#FF4500', font=self.fonte, command=self.Excluir_veiculos)
         self.botao_Excluir_veiculo.place(relx=0, rely=0, relheight=1, relwidth=1)
 
+    def frames_Registrar_locacao(self):
+        self.frame1Registrar_locacao = Frame(self.pg9, background='#008B8B')
+        self.frame1Registrar_locacao.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.2)
+
+        self.frame2Registrar_locacao = Frame(self.pg9, background='#008B8B')
+        self.frame2Registrar_locacao.place(relx=0.05, rely=0.25, relwidth=0.9, relheight=0.5)
+
+        self.frame3Registrar_locacao = Frame(self.pg9, background='#008B8B')
+        self.frame3Registrar_locacao.place(relx=0.05, rely=0.75, relwidth=0.9, relheight=0.2)
+
+    def widgets_Registrar_locacao(self):
+        self.fonte = Font(family="Arial Black", size=15)
+        self.fonte2 = Font(family="Arial Black", size=12)
+
+        self.texto_Locacao = Label(self.frame1Registrar_locacao, text='SELECIONE O VEÍCULO', font=self.fonte, background='#008B8B')
+        self.texto_Locacao.place(relx=0.2, rely=0, relwidth=0.6, relheight=0.3)
+
+        lista = []
+        listar('TODOS', "veiculos.txt", lista)
+        veiculos = [sublista[0] for sublista in lista]
+        self.selecionar_veiculo_locacao = ttk.Combobox(self.frame1Registrar_locacao, values=veiculos)
+        self.selecionar_veiculo_locacao.place(relx=0.2, rely=0.3, relwidth=0.6, relheight=0.3)
+
+        self.texto_cliente = Label(self.frame1Registrar_locacao, text='DADOS DO CLIENTE', font=self.fonte, background='#008B8B')
+        self.texto_cliente.place(relx=0.2, rely=0.7, relwidth=0.6, relheight=0.3)
+
+        self.texto_nome = Label(self.frame2Registrar_locacao, text='NOME', font=self.fonte2, background='#008B8B')
+        self.texto_nome.place(relx=0, rely=0, relwidth=0.15, relheight=0.1)
+
+        self.nome_cliente = Entry(self.frame2Registrar_locacao)
+        self.nome_cliente.place(relx=0, rely=0.1, relwidth=0.5, relheight=0.1)
+
+        self.texto_cpf = Label(self.frame2Registrar_locacao, text='CPF', font=self.fonte2, background='#008B8B')
+        self.texto_cpf.place(relx=0.6, rely=0, relwidth=0.15, relheight=0.1)
+
+        self.cpf_cliente = Entry(self.frame2Registrar_locacao)
+        self.cpf_cliente.place(relx=0.63, rely=0.1, relwidth=0.3, relheight=0.1)
+
+        self.texto_telefone = Label(self.frame2Registrar_locacao, text='TELEFONE', font=self.fonte2, background='#008B8B')
+        self.texto_telefone.place(relx=0, rely=0.25, relwidth=0.2, relheight=0.1)
+
+        self.telefone_cliente = Entry(self.frame2Registrar_locacao)
+        self.telefone_cliente.place(relx=0, rely=0.35, relwidth=0.5, relheight=0.1)
+
+        self.texto_rg = Label(self.frame2Registrar_locacao, text='RG', font=self.fonte2, background='#008B8B')
+        self.texto_rg.place(relx=0.6, rely=0.25, relwidth=0.15, relheight=0.1)
+
+        self.rg_cliente = Entry(self.frame2Registrar_locacao)
+        self.rg_cliente.place(relx=0.63, rely=0.35, relwidth=0.3, relheight=0.1)
+
+        self.texto_email = Label(self.frame2Registrar_locacao, text='EMAIL', font=self.fonte2, background='#008B8B')
+        self.texto_email.place(relx=0, rely=0.5, relwidth=0.15, relheight=0.1)
+
+        self.email_cliente = Entry(self.frame2Registrar_locacao)
+        self.email_cliente.place(relx=0, rely=0.6, relwidth=0.5, relheight=0.1)
+
+        self.texto_diarias = Label(self.frame2Registrar_locacao, text='DIARIAS', font=self.fonte2, background='#008B8B')
+        self.texto_diarias.place(relx=0.63, rely=0.5, relwidth=0.15, relheight=0.1)
+
+        self.diarias_cliente = Entry(self.frame2Registrar_locacao)
+        self.diarias_cliente.place(relx=0.63, rely=0.6, relwidth=0.3, relheight=0.1)
+
+        self.texto_pagamento = Label(self.frame2Registrar_locacao, text='FORMA DE PAGAMENTO', font=self.fonte2, background='#008B8B')
+        self.texto_pagamento.place(relx=0, rely=0.75, relwidth=0.45, relheight=0.1)
+
+        lista2 = ['DINHEIRO', 'CARTÃO DE CRÉDITO', 'CARTÃO DE DÉBITO', 'PIX']
+        self.selecionar_pagamento = ttk.Combobox(self.frame2Registrar_locacao, values=lista2)
+        self.selecionar_pagamento.place(relx=0, rely=0.85, relwidth=0.6, relheight=0.1)
+
+        self.valor_final = Label(self.frame3Registrar_locacao, text='VALOR TOTAL:', background='#008B8B', font=self.fonte2)
+        self.valor_final.place(relx=0, rely=0, relwidth=0.3, relheight=0.5)
+
+        self.imprimir = StringVar()
+        self.imprimir.set("")
+        self.mostrar_valor = Label(self.frame3Registrar_locacao, textvariable=self.imprimir, background='#008B8B', font=self.fonte2)
+        self.mostrar_valor.place(relx=0.3, rely=0, relwidth=0.4, relheight=0.5)
+
+        self.calcular_valor = Button(self.frame2Registrar_locacao, text='CALCULAR VALOR', bd=4, background='#FF4500', command=self.calculo_valor)
+        self.calcular_valor.place(relx=0.63, rely=0.75, relwidth=0.3, relheight=0.2)
+
+        self.confirmar_locacao = Button(self.frame3Registrar_locacao, text='CONFIRMAR', bd=4, background='#FF4500', command=self.locar_veiculo)
+        self.confirmar_locacao.place(relx=0.2, rely=0.6, relwidth=0.6, relheight=0.4)
 
 interface()
